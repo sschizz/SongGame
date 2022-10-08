@@ -1,16 +1,22 @@
+const fs = require('fs')
+const http = require('http')
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const btn = document.getElementById('btn_search')
     const input = document.getElementById('input')
     const socket = io()
 
     btn.addEventListener('click', async () => {
-        socket.emit('button-click', input.value)
+        socket.emit('song-search', input.value)
+        document.getElementById('audio').play()
     })
 
+    const audio = document.getElementById("audio")
+    var res = fs.createWriteStream(audio)
+    console.log(res)
     socket.on('search-result', (r) => {
         console.log(r)
-        var a = new Audio(r.videos[0].url)
-        a.play()
     })
 
     socket.on('new-connection', id => {
